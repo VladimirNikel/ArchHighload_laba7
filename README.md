@@ -23,7 +23,7 @@
 ## Инструкция по установке:
 1. Скачать/стянуть репозиторий
 1. Перейти в папку репозитория
-1. На сервере выполнить команду `docker build -t redis/server -f redis_dockerfile .` и произвести запуск контейнера при помощи команды `docker run -dt --name redis_server1 --restart on-failure -p 127.0.0.1:6379:5021 redis/server` и для второго `docker run -dt --name redis_server2 --restart on-failure -p 127.0.0.1:6379:5031 redis/server`.
+1. На сервере выполнить команды для запуска контейнеров `docker run -dt -v redis.conf:/usr/local/etc/redis/redis.conf -p 5021:6379 --name redis_server1 redis redis-server /usr/local/etc/redis/redis.conf` и для второго `docker run -dt -v redis.conf:/usr/local/etc/redis/redis.conf -p 5031:6379 --name redis_server2 redis redis-server /usr/local/etc/redis/redis.conf`.
 
 
 
