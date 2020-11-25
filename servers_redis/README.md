@@ -1,5 +1,8 @@
 # Развертывание серверов/кластеров Redis
 
+[1 источник *знаний*](https://medium.com/commencis/creating-redis-cluster-using-docker-67f65545796d)
+[2 источник *знаний*](https://redis.io/topics/cluster-tutorial)
+[3 источник *знаний*](https://netpoint-dc.com/blog/redis-cluster-linux/)
 
 1. Потребуются все файлы из этой директории на той машине/машинах, где будет развернуты в docker-контейнерах сервера redis'а
 
