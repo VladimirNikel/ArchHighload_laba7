@@ -35,8 +35,8 @@
 1. На сервере/серверах:
     1. Выполнить команду `docker build -t <название образа> -f dockerfile . `, мною для работы используется исходный образ ubuntu. Поэтому для создания образов использую команды:
     	```bash
-		docker build -dt ubuntu/archhightload_laba7_1 -f dockerfile1 .
-		docker build -dt ubuntu/archhightload_laba7_2 -f dockerfile2 .
+		docker build -t ubuntu/archhightload_laba7_1 -f dockerfile1 .
+		docker build -t ubuntu/archhightload_laba7_2 -f dockerfile2 .
     	```
     1. Выполнить команду `docker run -it --name <название контейнера> -p 0.0.0.0:<порт>:8000 ubuntu/archhightload_laba7` для создания docker-контейнера из docker-образа. В рамках задания были выполнены команды:
     	```bash
