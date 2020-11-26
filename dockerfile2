@@ -12,7 +12,6 @@ RUN pip3 install uvicorn
 RUN pip3 install pyowm
 RUN pip3 install redis-py-cluster
 
-RUN git clone https://github.com/VladimirNikel/ArchHighload_laba7.git
-RUN cd ArchHighload_laba7/
+COPY . .
 
 CMD export OWM_APP_KEY=6e91084d708cf0dcdabc8e852960d090 && python3 ./main.py 2
