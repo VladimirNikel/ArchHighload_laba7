@@ -162,43 +162,47 @@ redis-cli --cluster create 0.0.0.0:5021 0.0.0.0:5022 0.0.0.0:5023 0.0.0.0:5024 0
 
 
 
-```
-docker run -i --rm ruby sh -c '\
-gem install redis \
-&& wget http://download.redis.io/redis-stable/src/redis-trib.rb \
-&& chmod +x ./redis-trib.rb \
-&& ./redis-trib.rb create 172.17.0.8:5021 172.17.0.9:5022 172.17.0.10:5023'
-```
+	```bash
+	docker run -i --rm ruby sh -c '\
+	gem install redis \
+	&& wget http://download.redis.io/redis-stable/src/redis-trib.rb \
+	&& chmod +x ./redis-trib.rb \
+	&& ./redis-trib.rb create 172.17.0.8:5021 172.17.0.9:5022 172.17.0.10:5023'
+	```
+
+	...не работает тоже
+
 
 -----------
 
 # попытка №3
 
 
-	создание контейнеров:
-	```bash
-	docker run -dt -v redis-5033_replica.conf:/usr/local/etc/redis/redis-5033_replica.conf -p 5026:6379 -p 15026:16379 --name redis_server6 redis redis-server /usr/local/etc/redis/redis-5033_replica.conf
-	docker run -dt -v redis-5032_replica.conf:/usr/local/etc/redis/redis-5032_replica.conf -p 5025:6379 -p 15025:16379 --name redis_server5 redis redis-server /usr/local/etc/redis/redis-5032_replica.conf
-	docker run -dt -v redis-5031_replica.conf:/usr/local/etc/redis/redis-5031_replica.conf -p 5024:6379 -p 15024:16379 --name redis_server4 redis redis-server /usr/local/etc/redis/redis-5031_replica.conf
-	docker run -dt -v redis-5023_master.conf:/usr/local/etc/redis/redis-5023_master.conf -p 5023:6379 -p 15023:16379 --name redis_server3 redis redis-server /usr/local/etc/redis/redis-5023_master.conf
-	docker run -dt -v redis-5022_master.conf:/usr/local/etc/redis/redis-5022_master.conf -p 5022:6379 -p 15022:16379 --name redis_server2 redis redis-server /usr/local/etc/redis/redis-5022_master.conf
-	docker run -dt -v redis-5021_master.conf:/usr/local/etc/redis/redis-5021_master.conf -p 5021:6379 -p 15021:16379 --name redis_server1 redis redis-server /usr/local/etc/redis/redis-5021_master.conf
-	docker ps -a
-	```
+создание контейнеров:
 
-	Удаление контейнеров:
-	```bash
-	docker stop redis_server1
-	docker stop redis_server2
-	docker stop redis_server3
-	docker stop redis_server4
-	docker stop redis_server5
-	docker stop redis_server6
-	docker rm redis_server1
-	docker rm redis_server2
-	docker rm redis_server3
-	docker rm redis_server4
-	docker rm redis_server5
-	docker rm redis_server6
-	docker ps -a
-	```
+```bash
+docker run -dt -v $PWD/redis-5033_replica.conf:/usr/local/etc/redis/redis-5033_replica.conf -p 5033:5033 -p 15033:15033 --name redis_server6 redis redis-server /usr/local/etc/redis/redis-5033_replica.conf
+docker run -dt -v $PWD/redis-5032_replica.conf:/usr/local/etc/redis/redis-5032_replica.conf -p 5032:5032 -p 15032:15032 --name redis_server5 redis redis-server /usr/local/etc/redis/redis-5032_replica.conf
+docker run -dt -v $PWD/redis-5031_replica.conf:/usr/local/etc/redis/redis-5031_replica.conf -p 5031:5031 -p 15031:15031 --name redis_server4 redis redis-server /usr/local/etc/redis/redis-5031_replica.conf
+docker run -dt -v $PWD/redis-5023_master.conf:/usr/local/etc/redis/redis-5023_master.conf -p 5023:5023 -p 15023:15023 --name redis_server3 redis redis-server /usr/local/etc/redis/redis-5023_master.conf
+docker run -dt -v $PWD/redis-5022_master.conf:/usr/local/etc/redis/redis-5022_master.conf -p 5022:5022 -p 15022:15022 --name redis_server2 redis redis-server /usr/local/etc/redis/redis-5022_master.conf
+docker run -dt -v $PWD/redis-5021_master.conf:/usr/local/etc/redis/redis-5021_master.conf -p 5021:5021 -p 15021:15021 --name redis_server1 redis redis-server /usr/local/etc/redis/redis-5021_master.conf
+docker ps -a
+```
+
+Удаление контейнеров:
+```bash
+docker stop redis_server1
+docker stop redis_server2
+docker stop redis_server3
+docker stop redis_server4
+docker stop redis_server5
+docker stop redis_server6
+docker rm redis_server1
+docker rm redis_server2
+docker rm redis_server3
+docker rm redis_server4
+docker rm redis_server5
+docker rm redis_server6
+docker ps -a
+```
