@@ -34,11 +34,15 @@
 	```
 1. На сервере/серверах:
     1. Выполнить команду `docker build -t <название образа> -f dockerfile . `, мною для работы используется исходный образ ubuntu. Поэтому для создания образов использую команды:
-        * `docker build -t ubuntu/archhightload_laba7_1 -f dockerfile1 .`
-        * `docker build -t ubuntu/archhightload_laba7_2 -f dockerfile2 .`
+    	```bash
+		docker build -t ubuntu/archhightload_laba7_1 -f dockerfile1 .
+		docker build -t ubuntu/archhightload_laba7_2 -f dockerfile2 .
+    	```
     1. Выполнить команду `docker run -it --name <название контейнера> -p 0.0.0.0:<порт>:8000 ubuntu/archhightload_laba7` для создания docker-контейнера из docker-образа. В рамках задания были выполнены команды:
-        * `docker run -it --name laba7_1_archHL -p 0.0.0.0:5020:8000 ubuntu/archhightload_laba7_1`
-        * `docker run -it --name laba7_2_archHL -p 0.0.0.0:5030:8000 ubuntu/archhightload_laba7_2`
+    	```bash
+		docker run -dt --name laba7_1_archHL -p 0.0.0.0:5020:8000 ubuntu/archhightload_laba7_1
+		docker run -dt --name laba7_2_archHL -p 0.0.0.0:5030:8000 ubuntu/archhightload_laba7_2
+        ```
 1. Пользоваться приложением:
 	- либо браузером по [адресу](http://127.0.0.1:80) 
 	- либо терминалом:
