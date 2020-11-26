@@ -20,9 +20,8 @@ from pyowm.utils import timestamps
 import redis
 
 #задание параметров redis'а
-redis_host, redis_port, redis_db = '194.61.2.84', 5021, 0
-r1 = redis.Redis(host=redis_host, port=redis_port, db=redis_db)
-r2 = redis.Redis(host=redis_host, port=redis_port+10, db=redis_db)
+redis_host, redis_port, redis_db = '194.61.2.84', 6379, 0
+r = redis.Redis(host=redis_host, port=redis_port, db=redis_db)
 time_storage = 60*10				#10 минут - актуальность данных о погоде в городе
 
 config_dict = get_default_config()
@@ -41,10 +40,7 @@ def current_weather(city: str):
 	temp = w.temperature('celsius')['temp']
 
 	#занесение в бд данных
-	if r1.ping():
-		r1.set(city, temp, ex=time_storage)
-	if r2.ping():
-		r2.set(city, temp, ex=time_storage)
+	r.set(city, temp, ex=time_storage)
 
 	#возвращение текущей погоды
 	return temp
@@ -63,52 +59,24 @@ def forecast_weather(city: str, timestamp: str):
 	temp = w.temperature('celsius')['temp']
 
 	#занесение в бд данных (не совсем корректно, ведь у нас прогноз погоды...)
-	if r1.ping():
-		r1.set(city, temp, ex=time_storage)
-	if r2.ping():
-		r2.set(city, temp, ex=time_storage)
+	r.set(city, temp, ex=time_storage)
 
 	#возвращение текущей погоды
 	return temp
 
 #кто будет читать и использовать код ниже: простите меня ;) костыль еще тот... надо было через nginx делать
 def find_data(city: str, metod: bool, ts: str):
-	if r1.ping() and r2.ping():
-		if type(r1.get(city)) != type(None):
-			#если в базе найдено значение
-			print("city: ",city," взято из кэша и актуально: ", r1.ttl(city))
-			return r1.get(city).decode("utf-8")
-		else:
-			#если не найдено значение
-			print("city: ",city," ищем в API")
-			if metod == True:	#current weather
-				return current_weather(city)
-			else:				#forecast weather
-				return forecast_weather(city, ts)
-
+	if type(r.get(city)) != type(None):
+		#если в базе найдено значение
+		print("city: ",city," взято из кэша и актуально: ", r.ttl(city))
+		return r.get(city).decode("utf-8")
 	else:
-		if r1.ping():
-			if type(r1.get(city)) != type(None):
-				print("city: ",city," взято из 1 кэша и актуально: ", r1.ttl(city))
-				return r1.get(city).decode("utf-8")
-			else:
-				#если не найдено значение
-				print("city: ",city," ищем в API")
-				if metod == True:	#current weather
-					return current_weather(city)
-				else:				#forecast weather
-					return forecast_weather(city, ts)
-		if r2.ping():
-			if type(r2.get(city)) != type(None):
-				print("city: ",city," взято из 2 кэша и актуально: ", r2.ttl(city))
-				return r2.get(city).decode("utf-8")
-			else:
-				#если не найдено значение
-				print("city: ",city," ищем в API")
-				if metod == True:	#current weather
-					return current_weather(city)
-				else:				#forecast weather
-					return forecast_weather(city, ts)
+		#если не найдено значение
+		print("city: ",city," ищем в API")
+		if metod == True:	#current weather
+			return current_weather(city)
+		else:				#forecast weather
+			return forecast_weather(city, ts)
 
 @app.get("/")
 def print_web():
