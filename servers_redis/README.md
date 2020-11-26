@@ -186,18 +186,26 @@ docker run -dt -v $PWD/redis-5032_replica.conf:/usr/local/etc/redis/redis-5032_r
 docker run -dt -v $PWD/redis-5031_replica.conf:/usr/local/etc/redis/redis-5031_replica.conf -p 5031:5031 -p 15031:15031 --name redis_server4 redis redis-server /usr/local/etc/redis/redis-5031_replica.conf
 docker run -dt -v $PWD/redis-5023_master.conf:/usr/local/etc/redis/redis-5023_master.conf -p 5023:5023 -p 15023:15023 --name redis_server3 redis redis-server /usr/local/etc/redis/redis-5023_master.conf
 docker run -dt -v $PWD/redis-5022_master.conf:/usr/local/etc/redis/redis-5022_master.conf -p 5022:5022 -p 15022:15022 --name redis_server2 redis redis-server /usr/local/etc/redis/redis-5022_master.conf
-docker run -dt -v $PWD/redis-5021_master.conf:/usr/local/etc/redis/redis-5021_master.conf -p 5021:5021 -p 15021:15021 --name redis_server1 redis redis-server /usr/local/etc/redis/redis-5021_master.conf
+docker run -dt -v $PWD/redis-5021_master.conf:/usr/local/etc/redis/redis-5021_master.conf -p 5021:5021 -p 15021:15021 -p 5010:30001 --name redis_server1 redis redis-server /usr/local/etc/redis/redis-5021_master.conf
+
+docker run -it --name redis_control redis redis-cli --cluster create 127.0.0.1:5021 127.0.0.1:5022 127.0.0.1:5023 127.0.0.1:5031 127.0.0.1:5032 127.0.0.1:5033 --cluster-replicas 1
+
+docker run -it --name redis_control redis redis-cli --cluster create 172.17.0.10:5021 172.17.0.9:5022 172.17.0.8:5023
+
+
 docker ps -a
 ```
 
 Удаление контейнеров:
 ```bash
+docker stop redis_control
 docker stop redis_server1
 docker stop redis_server2
 docker stop redis_server3
 docker stop redis_server4
 docker stop redis_server5
 docker stop redis_server6
+docker rm redis_control
 docker rm redis_server1
 docker rm redis_server2
 docker rm redis_server3
@@ -206,3 +214,36 @@ docker rm redis_server5
 docker rm redis_server6
 docker ps -a
 ```
+
+
+
+
+-----------
+
+# попытка №4
+
+создание контейнеров:
+
+```bash
+docker run -dt -v $PWD/c_slave.conf:/usr/local/etc/redis/c_slave.conf --net=host --name redis_server_c redis redis-server /usr/local/etc/redis/c_slave.conf
+docker run -dt -v $PWD/b_slave.conf:/usr/local/etc/redis/b_slave.conf --net=host --name redis_server_b redis redis-server /usr/local/etc/redis/b_slave.conf
+docker run -dt -v $PWD/a_master.conf:/usr/local/etc/redis/a_master --net=host--name redis_server_a redis redis-server /usr/local/etc/redis/a_master
+
+docker run -it --name redis_control redis redis-cli --cluster create localhost:6379 localhost:6380 localhost:6381
+
+docker ps -a
+```
+
+Удаление контейнеров:
+```bash
+docker stop redis_control
+docker stop redis_server_a
+docker stop redis_server_b
+docker stop redis_server_c
+docker rm redis_control
+docker rm redis_server_a
+docker rm redis_server_b
+docker rm redis_server_c
+docker ps -a
+```
+
