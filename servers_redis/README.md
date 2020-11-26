@@ -1,5 +1,8 @@
 # Развертывание серверов/кластеров Redis
 
+<details>
+<summary>Попытка 1</summary>
+
 [1 источник знаний](https://medium.com/commencis/creating-redis-cluster-using-docker-67f65545796d)
 
 [2 источник знаний](https://redis.io/topics/cluster-tutorial)
@@ -125,11 +128,13 @@
 redis-cli --cluster create 0.0.0.0:5021 0.0.0.0:5022 0.0.0.0:5023 0.0.0.0:5024 0.0.0.0:5025 0.0.0.0:5026 --cluster-replicas 1
 ```
 
-
+</details>
 
 -----------
 
-# попытка №2
+
+<details>
+<summary>Попытка 2</summary>
 
 либо пользуемся ***redis*** - образом docker'а, либо формируем свой образ (на той же ubuntu либо другой ОС на ваш вкус)
 - образ docker'a:
@@ -173,9 +178,13 @@ redis-cli --cluster create 0.0.0.0:5021 0.0.0.0:5022 0.0.0.0:5023 0.0.0.0:5024 0
 	...не работает тоже
 
 
+</details>
+
 -----------
 
-# попытка №3
+
+<details>
+<summary>Попытка 3</summary>
 
 
 создание контейнеров:
@@ -215,8 +224,7 @@ docker rm redis_server6
 docker ps -a
 ```
 
-
-
+</details>
 
 -----------
 
@@ -227,10 +235,8 @@ docker ps -a
 ```bash
 docker run -dt -v $PWD/c_slave.conf:/usr/local/etc/redis/c_slave.conf --net=host --name redis_server_c redis redis-server /usr/local/etc/redis/c_slave.conf
 docker run -dt -v $PWD/b_slave.conf:/usr/local/etc/redis/b_slave.conf --net=host --name redis_server_b redis redis-server /usr/local/etc/redis/b_slave.conf
-docker run -dt -v $PWD/a_master.conf:/usr/local/etc/redis/a_master --net=host--name redis_server_a redis redis-server /usr/local/etc/redis/a_master
-
-docker run -it --name redis_control redis redis-cli --cluster create localhost:6379 localhost:6380 localhost:6381
-
+docker run -dt -v $PWD/a_master.conf:/usr/local/etc/redis/a_master.conf --net=host --name redis_server_a redis redis-server /usr/local/etc/redis/a_master.conf
+docker run -dt --name redis_control redis redis-cli --cluster create 194.61.2.84:6379 194.61.2.84:6380 194.61.2.84:6381 --cluster-yes
 docker ps -a
 ```
 
