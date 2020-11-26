@@ -17,11 +17,13 @@ import pyowm
 from pyowm.utils.config import get_default_config
 from pyowm.utils import timestamps
 
-import redis
+import rediscluster
 
 #задание параметров redis'а
 redis_host, redis_port, redis_db = '194.61.2.84', 6379, 0
-r = redis.Redis(host=redis_host, port=redis_port, db=redis_db)
+
+rc = rediscluster.RedisCluster(startup_nodes=[{"host": redis_host, "port": redis_port}], decode_responses=True)
+
 time_storage = 60*10				#10 минут - актуальность данных о погоде в городе
 
 config_dict = get_default_config()
@@ -40,7 +42,7 @@ def current_weather(city: str):
 	temp = w.temperature('celsius')['temp']
 
 	#занесение в бд данных
-	r.set(city, temp, ex=time_storage)
+	rc.set(city, temp, ex=time_storage)
 
 	#возвращение текущей погоды
 	return temp
@@ -59,17 +61,17 @@ def forecast_weather(city: str, timestamp: str):
 	temp = w.temperature('celsius')['temp']
 
 	#занесение в бд данных (не совсем корректно, ведь у нас прогноз погоды...)
-	r.set(city, temp, ex=time_storage)
+	rc.set(city, temp, ex=time_storage)
 
 	#возвращение текущей погоды
 	return temp
 
 #кто будет читать и использовать код ниже: простите меня ;) костыль еще тот... надо было через nginx делать
 def find_data(city: str, metod: bool, ts: str):
-	if type(r.get(city)) != type(None):
+	if type(rc.get(city)) != type(None):
 		#если в базе найдено значение
-		print("city: ",city," взято из кэша и актуально: ", r.ttl(city))
-		return r.get(city).decode("utf-8")
+		print("city: ",city," взято из кэша и актуально: ", rc.ttl(city))
+		return rc.get(city)
 	else:
 		#если не найдено значение
 		print("city: ",city," ищем в API")
@@ -95,3 +97,4 @@ def forecast(city: str, timestamp: str):
 
 if __name__ == "__main__":
 	uvicorn.run(app, host="0.0.0.0", port=8000)
+	pool.release(client)
