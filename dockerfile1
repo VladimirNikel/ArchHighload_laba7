@@ -13,5 +13,6 @@ RUN pip3 install pyowm
 RUN pip3 install redis-py-cluster
 
 RUN git clone https://github.com/VladimirNikel/ArchHighload_laba7
+RUN cd ArchHighload_laba7
 
-CMD export OWM_APP_KEY=6e91084d708cf0dcdabc8e852960d090 && python3 ./ArchHighload_laba7/main.py 1
+CMD export OWM_APP_KEY=6e91084d708cf0dcdabc8e852960d090 && python3 ./main.py 1

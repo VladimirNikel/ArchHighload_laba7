@@ -53,4 +53,4 @@
 	+ FastAPI `sudo pip3 install fastapi`
 	+ Unicorn `sudo pip3 install uvicorn`
 	+ redis-py-cluster `sudo pip3 install redis-py-cluster` [ссылка](https://pypi.org/project/redis-py-cluster/)
-	+ ~~ранее был использован redis, но он [не поддерживает работу с кластером](https://github.com/andymccurdy/redis-py#cluster-mode)~~
+	+ ~~ранее был использован ***redis***, но он [не поддерживает работу с кластером](https://github.com/andymccurdy/redis-py#cluster-mode)~~
