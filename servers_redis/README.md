@@ -12,10 +12,13 @@ cd servers_redis
 Необходимо выполнить команды, приведенные ниже, при этом при создании ***redis_control*** необходимо указывать ip-адреса серверов
 
 ```bash
-docker run -dt -v $PWD/c_slave.conf:/usr/local/etc/redis/c_slave.conf --net=host --name redis_server_c redis redis-server /usr/local/etc/redis/c_slave.conf
-docker run -dt -v $PWD/b_slave.conf:/usr/local/etc/redis/b_slave.conf --net=host --name redis_server_b redis redis-server /usr/local/etc/redis/b_slave.conf
+docker run -dt -v $PWD/c_replic.conf:/usr/local/etc/redis/c_replic.conf --net=host --name redis_server_c redis redis-server /usr/local/etc/redis/c_replic.conf
+docker run -dt -v $PWD/b_replic.conf:/usr/local/etc/redis/b_replic.conf --net=host --name redis_server_b redis redis-server /usr/local/etc/redis/b_replic.conf
+docker run -dt -v $PWD/a_replic.conf:/usr/local/etc/redis/a_replic.conf --net=host --name redis_server_a redis redis-server /usr/local/etc/redis/a_replic.conf
+docker run -dt -v $PWD/c_master.conf:/usr/local/etc/redis/c_master.conf --net=host --name redis_server_c redis redis-server /usr/local/etc/redis/c_master.conf
+docker run -dt -v $PWD/b_master.conf:/usr/local/etc/redis/b_master.conf --net=host --name redis_server_b redis redis-server /usr/local/etc/redis/b_master.conf
 docker run -dt -v $PWD/a_master.conf:/usr/local/etc/redis/a_master.conf --net=host --name redis_server_a redis redis-server /usr/local/etc/redis/a_master.conf
-docker run -dt --name redis_control redis redis-cli --cluster create 194.61.2.84:6379 194.61.2.84:6380 194.61.2.84:6381 --cluster-yes
+docker run -dt --name redis_control redis redis-cli --cluster create 194.61.2.84:6379 194.61.2.84:6380 194.61.2.84:6381 194.61.2.84:6382 194.61.2.84:6383 194.61.2.84:6384 --cluster-yes
 docker ps -a
 ```
 
