@@ -20,10 +20,8 @@ from pyowm.utils import timestamps
 import rediscluster
 
 #задание параметров redis'а
-redis_host, redis_port, redis_db = '194.61.2.84', 6379, 0
-
+redis_host, redis_port = '194.61.2.84', 6379
 rc = rediscluster.RedisCluster(startup_nodes=[{"host": redis_host, "port": redis_port}], decode_responses=True)
-
 time_storage = 60*10				#10 минут - актуальность данных о погоде в городе
 
 config_dict = get_default_config()
@@ -97,4 +95,3 @@ def forecast(city: str, timestamp: str):
 
 if __name__ == "__main__":
 	uvicorn.run(app, host="0.0.0.0", port=8000)
-	pool.release(client)
