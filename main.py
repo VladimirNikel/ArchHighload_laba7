@@ -1,6 +1,8 @@
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from rediscluster import RedisCluster
+
 app = FastAPI()
 
 import uvicorn
@@ -17,11 +19,20 @@ import pyowm
 from pyowm.utils.config import get_default_config
 from pyowm.utils import timestamps
 
-import redis
-
 #задание параметров redis'а
 redis_host, redis_port, redis_db = '194.61.2.84', 6379, 0
-r = redis.Redis(host=redis_host, port=redis_port, db=redis_db)
+nodes = [
+    {"host": "127.0.0.1", "port": "7000"},
+    {"host": "127.0.0.1", "port": "7001"},
+    {"host": "127.0.0.1", "port": "7002"},
+]
+
+#задание параметров redis'а
+r = RedisCluster(startup_nodes=nodes, decode_responses=True)
+# Just demo
+r.set('foo', 'bar')
+print(r.get('foo'))
+
 time_storage = 60*10				#10 минут - актуальность данных о погоде в городе
 
 config_dict = get_default_config()

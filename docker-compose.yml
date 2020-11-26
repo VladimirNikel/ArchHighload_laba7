@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+  redis-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT_CONFIG: 7001
+    network_mode: "host"
+    ports:
+      - "7001:7001"
+  redis-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT_CONFIG: 7002
+    network_mode: "host"
+    ports:
+      - "7002:7002"
+  redis-3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT_CONFIG: 7003
+    network_mode: "host"
+    ports:
+      - "7003:7003"
+  redis-4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT_CONFIG: 7004
+    network_mode: "host"
+    ports:
+      - "7004:7004"
+  redis-5:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT_CONFIG: 7005
+    network_mode: "host"
+    ports:
+      - "7005:7005"
+  redis-6:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PORT_CONFIG: 7006
+    network_mode: "host"
+    ports:
+      - "7006:7006"
